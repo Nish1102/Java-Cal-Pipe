@@ -11,15 +11,14 @@ pipeline {
         stage('Build and Run') {
             steps {
                 script {
-                    // Compile and run Java code
                     def isWindows = isUnix() ? false : true
 
                     if (isWindows) {
-                        bat 'javac src\\Calculator.java'
-                        bat 'java -cp src Calculator'
+                        bat 'javac Calculator.java'
+                        bat 'java Calculator'
                     } else {
-                        sh 'javac src/Calculator.java'
-                        sh 'java -cp src Calculator'
+                        sh 'javac Calculator.java'
+                        sh 'java Calculator'
                     }
                 }
             }
@@ -38,4 +37,3 @@ pipeline {
         }
     }
 }
-
