@@ -1,26 +1,24 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'openjdk:11' // Use an OpenJDK 11 image
+        }
+    }
 
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the Git repository
                 checkout scm
             }
         }
 
-        stage('Build') {
+        stage('Build and Test') {
             steps {
-                // Compile the Java code
-                sh 'javac src/Calculator.java'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                // Run unit tests (if you have any)
-                // You may need to modify this step based on your testing framework
-                sh 'java -cp src org.junit.runner.JUnitCore CalculatorTest'
+                script {
+                    // Compile and run tests for the Java code
+                    sh 'javac src/Calculator.java'
+                    sh 'java -cp src org.junit.runner.JUnitCore CalculatorTest'
+                }
             }
         }
 
@@ -35,17 +33,14 @@ pipeline {
 
     post {
         success {
-            // This block will be executed if the pipeline is successful
             echo 'Pipeline succeeded!'
-
-            // You can add additional actions here, such as sending notifications or triggering other jobs
+            // Add additional actions here for a successful build
         }
 
         failure {
-            // This block will be executed if the pipeline fails
             echo 'Pipeline failed!'
-
-            // You can add actions to take in case of failure, such as sending notifications or rolling back deployments
+            // Add actions to take in case of failure, such as sending notifications or rolling back deployments
         }
     }
 }
+
