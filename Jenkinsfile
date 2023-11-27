@@ -8,14 +8,15 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                // Checkout the code from the Git repository
                 checkout scm
             }
         }
 
         stage('Build and Test') {
             steps {
+                // Compile and run tests for the Java code
                 script {
-                    // Compile and run tests for the Java code
                     sh 'javac src/Calculator.java'
                     sh 'java -cp src org.junit.runner.JUnitCore CalculatorTest'
                 }
@@ -33,14 +34,17 @@ pipeline {
 
     post {
         success {
+            // This block will be executed if the pipeline is successful
             echo 'Pipeline succeeded!'
-            // Add additional actions here for a successful build
+
+            // You can add additional actions here, such as sending notifications or triggering other jobs
         }
 
         failure {
+            // This block will be executed if the pipeline fails
             echo 'Pipeline failed!'
-            // Add actions to take in case of failure, such as sending notifications or rolling back deployments
+
+            // You can add actions to take in case of failure, such as sending notifications or rolling back deployments
         }
     }
 }
-
