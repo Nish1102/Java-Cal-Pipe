@@ -2,12 +2,25 @@ pipeline {
     agent any
 
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build and Run') {
             steps {
                 script {
                     // Compile and run Java code
-                    sh 'javac src/Calculator.java'
-                    sh 'java -cp src Calculator'
+                    def isWindows = isUnix() ? false : true
+
+                    if (isWindows) {
+                        bat 'javac src\\Calculator.java'
+                        bat 'java -cp src Calculator'
+                    } else {
+                        sh 'javac src/Calculator.java'
+                        sh 'java -cp src Calculator'
+                    }
                 }
             }
         }
@@ -25,3 +38,4 @@ pipeline {
         }
     }
 }
+
